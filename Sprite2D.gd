@@ -1,20 +1,22 @@
 extends Sprite2D
 
+var angular_speed = PI
+var speed = 400.0
+
 func _process(delta):
-	var speed = 800
-	var move = Vector2()
+	var direction = 0
 
-	if Input.is_action_pressed("ui_accept"):
-		speed = 2000
-
-	if Input.is_action_pressed("ui_right"):
-		move.x += 1
 	if Input.is_action_pressed("ui_left"):
-		move.x -= 1
-	if Input.is_action_pressed("ui_down"):
-		move.y += 1
-	if Input.is_action_pressed("ui_up"):
-		move.y -= 1
+		direction = -1
+	if Input.is_action_pressed("ui_right"):
+		direction = 1
 
-	move = move.normalized() * speed * delta
-	position += move
+	rotation += angular_speed * direction * delta
+
+	var velocity = Vector2.ZERO
+	if Input.is_action_pressed("ui_up"):
+		velocity = Vector2.UP.rotated(rotation) * speed
+	if Input.is_action_pressed("ui_down"):
+		velocity = Vector2.DOWN.rotated(rotation) * speed
+
+	position += velocity * delta
